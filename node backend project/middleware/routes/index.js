@@ -119,255 +119,238 @@ module.exports = function(passport) {
     })
 
     router.get('/loggedinUsers', function(req, res, next) {
-				 var response={};
-	userCredentials.find({
+        var response = {};
+        userCredentials.find({
             status: 'online'
         }, function(err, data) {
-                  if (err) {
+            if (err) {
                 response = {
                     "error": true,
                     "message": "Error fetching data"
                 };
             } else {
-				if(JSON.stringify(data)==='[]')
-				{
-					response = {
-                    "error": true,
-                    "message": "Error fetching data"
-                };
-				}
-				else
-				{
-					  response = {
-                    "error": false,
-                    "message": data
-                };
-				}
-              
+                if (JSON.stringify(data) === '[]') {
+                    response = {
+                        "error": true,
+                        "message": "Error fetching data"
+                    };
+                } else {
+                    response = {
+                        "error": false,
+                        "message": data
+                    };
+                }
+
             }
             res.json(response);
         });
 
     })
-	 router.get('/usersDetails', function(req, res, next) {
-		 var response={};
+    router.get('/usersDetails', function(req, res, next) {
+        var response = {};
         userCredentials.find({}, function(err, data) {
-                   if (err) {
+            if (err) {
                 response = {
                     "error": true,
                     "message": "Error fetching data"
                 };
             } else {
-				if(JSON.stringify(data)==='[]')
-				{
-					response = {
-                    "error": true,
-                    "message": "Error fetching data"
-                };
-				}
-				else
-				{
-					  response = {
-                    "error": false,
-                    "message": data
-                };
-				}
-              
+                if (JSON.stringify(data) === '[]') {
+                    response = {
+                        "error": true,
+                        "message": "Error fetching data"
+                    };
+                } else {
+                    response = {
+                        "error": false,
+                        "message": data
+                    };
+                }
+
             }
             res.json(response);
         });
 
     })
-		 router.get('/getMeetings', function(req, res, next) {
-	 request('http://'+serverConfig.hostname1+':'+serverConfig.port1+'/calendarId/	', function (error, response, body) {
-                   if (error) {
+    router.get('/getMeetings', function(req, res, next) {
+        request('http://' + serverConfig.hostname1 + ':' + serverConfig.port1 + '/calendarId/	', function(error, response, body) {
+            if (error) {
                 response = {
                     "error": true,
                     "message": "Error fetching data"
                 };
             } else {
-				if(JSON.stringify(body)==='[]')
-				{
-					response = {
-                    "error": true,
-                    "message": "Error fetching data"
-                };
-				}
-				else
-				{
-					  response = {
-                    "error": false,
-                    "message": body
-                };
-				}
-              
+                if (JSON.stringify(body) === '[]') {
+                    response = {
+                        "error": true,
+                        "message": "Error fetching data"
+                    };
+                } else {
+                    response = {
+                        "error": false,
+                        "message": body
+                    };
+                }
+
             }
             res.json(response);
         });
 
     })
-			 router.post('/setMeeting', function(req, res, next) {
-            request({
-                    url: 'http://'+serverConfig.hostname1+':'+serverConfig.port1+'/calendarId/',
-                    method: 'POST',
-                    json: { //sample json data
-                        "CalendarId": 1231,
-                        "StartTime": "12:30am1",
-                        "Duration": 601,
-                        "StartDate": "12-5-2011",
-                        "subject": "node disscussion1",
-                        "users": [{
-                            "fisrtName": "abhi"
-                        }, {
-                            "fisrtName": "abhi1"
-                        }]
+    router.post('/setMeeting', function(req, res, next) {
+        request({
+                url: 'http://' + serverConfig.hostname1 + ':' + serverConfig.port1 + '/calendarId/',
+                method: 'POST',
+                json: { //sample json data
+                    "CalendarId": 1231,
+                    "StartTime": "12:30am1",
+                    "Duration": 601,
+                    "StartDate": "12-5-2011",
+                    "subject": "node disscussion1",
+                    "users": [{
+                        "fisrtName": "abhi"
+                    }, {
+                        "fisrtName": "abhi1"
+                    }]
 
-			}},
-                    function(error, response, body) {
-                        if (error) {
-                            response = {
-                                "error": true,
-                                "message": "Error fetching data"
-                            };
-                        } else {
-                            if (JSON.stringify(body) === '[]') {
-                                response = {
-                                    "error": true,
-                                    "message": "Error fetching data"
-                                };
-                            } else {
-                                response = {
-                                    "error": false,
-                                    "message'": body.meetingId
-                                };
-                            }
+                }
+            },
+            function(error, response, body) {
+                if (error) {
+                    response = {
+                        "error": true,
+                        "message": "Error fetching data"
+                    };
+                } else {
+                    if (JSON.stringify(body) === '[]') {
+                        response = {
+                            "error": true,
+                            "message": "Error fetching data"
+                        };
+                    } else {
+                        response = {
+                            "error": false,
+                            "message'": body.meetingId
+                        };
+                    }
 
-                        }
-                        res.json(response);
-                    });
+                }
+                res.json(response);
+            });
 
-            })
-		router.get('/cancleMeeting/:id', function(req, res, next) {
-	 request({
-			url: 'http://'+serverConfig.hostname1+':'+serverConfig.port1+'/calendarId/'+req.params.id,
-			method: 'PUT'}, function (error, response, body) {
-                   if (error) {
+    })
+    router.get('/cancleMeeting/:id', function(req, res, next) {
+        request({
+            url: 'http://' + serverConfig.hostname1 + ':' + serverConfig.port1 + '/calendarId/' + req.params.id,
+            method: 'PUT'
+        }, function(error, response, body) {
+            if (error) {
                 response = {
                     "error": true,
                     "message": "Error fetching data"
                 };
             } else {
-				if(JSON.stringify(body)==='[]')
-				{
-					response = {
-                    "error": true,
-                    "message": "Error fetching data"
-                };
-				}
-				else
-				{
-					  response = {
-                    "error": false,
-                    "message": body
-                };
-				}
-              
+                if (JSON.stringify(body) === '[]') {
+                    response = {
+                        "error": true,
+                        "message": "Error fetching data"
+                    };
+                } else {
+                    response = {
+                        "error": false,
+                        "message": body
+                    };
+                }
+
             }
             res.json(response);
         });
 
     })
-			router.get('/deleteMeeting/:id', function(req, res, next) {
-	 request({
-			url: 'http://'+serverConfig.hostname1+':'+serverConfig.port1+'/calendarId/'+req.params.id,
-			method: 'DELETE'}, function (error, response, body) {
-                   if (error) {
+    router.get('/deleteMeeting/:id', function(req, res, next) {
+        request({
+            url: 'http://' + serverConfig.hostname1 + ':' + serverConfig.port1 + '/calendarId/' + req.params.id,
+            method: 'DELETE'
+        }, function(error, response, body) {
+            if (error) {
                 response = {
                     "error": true,
                     "message": "Error fetching data"
                 };
             } else {
-				if(JSON.stringify(body)==='[]')
-				{
-					response = {
-                    "error": true,
-                    "message": "Error fetching data"
-                };
-				}
-				else
-				{
-					  response = {
-                    "error": false,
-                    "message": body
-                };
-				}
-              
+                if (JSON.stringify(body) === '[]') {
+                    response = {
+                        "error": true,
+                        "message": "Error fetching data"
+                    };
+                } else {
+                    response = {
+                        "error": false,
+                        "message": body
+                    };
+                }
+
             }
             res.json(response);
         });
 
     })
-	
-			 router.get('/getCounters', function(req, res, next) {
-	 request('http://'+serverConfig.hostname1+':'+serverConfig.port1+'/calendarId/counters', function (error, response, body) {
-                   if (error) {
+
+    router.get('/getCounters', function(req, res, next) {
+        request('http://' + serverConfig.hostname1 + ':' + serverConfig.port1 + '/calendarId/counters', function(error, response, body) {
+            if (error) {
                 response = {
                     "error": true,
                     "message": "Error fetching data"
                 };
             } else {
-				if(JSON.stringify(body)==='[]')
-				{
-					response = {
-                    "error": true,
-                    "message": "Error fetching data"
-                };
-				}
-				else
-				{
-					  response = {
-                    "error": false,
-                    "message": body
-                };
-				}
-              
+                if (JSON.stringify(body) === '[]') {
+                    response = {
+                        "error": true,
+                        "message": "Error fetching data"
+                    };
+                } else {
+                    response = {
+                        "error": false,
+                        "message": body
+                    };
+                }
+
             }
             res.json(response);
         });
 
     })
-	
-	
-			router.get('/resetCounters', function(req, res, next) {
-	 request({
-			url: 'http://'+serverConfig.hostname1+':'+serverConfig.port1+'/calendarId/clearCounter',
-			method: 'PUT'}, function (error, response, body) {
-                   if (error) {
+
+
+    router.get('/resetCounters', function(req, res, next) {
+        request({
+            url: 'http://' + serverConfig.hostname1 + ':' + serverConfig.port1 + '/calendarId/clearCounter',
+            method: 'PUT'
+        }, function(error, response, body) {
+            if (error) {
                 response = {
                     "error": true,
                     "message": "Error fetching data"
                 };
             } else {
-				if(JSON.stringify(body)==='[]')
-				{
-					response = {
-                    "error": true,
-                    "message": "Error fetching data"
-                };
-				}
-				else
-				{
-					  response = {
-                    "error": false,
-                    "message": body
-                };
-				}
-              
+                if (JSON.stringify(body) === '[]') {
+                    response = {
+                        "error": true,
+                        "message": "Error fetching data"
+                    };
+                } else {
+                    response = {
+                        "error": false,
+                        "message": body
+                    };
+                }
+
             }
             res.json(response);
         });
 
     })
-	
+
     return router;
 }
