@@ -1,0 +1,10 @@
+{
+ "hostname" : "localhost",
+ "port"		: "27017",
+ "database" : "demoDb",
+ "username" : "mongouser",
+ "password" : "secret",
+ "collection1" : "counters",
+ "collection2" : "schedulemeetings"
+ 
+}

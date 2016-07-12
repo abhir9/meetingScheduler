@@ -1,0 +1,8 @@
+{
+ "hostname" : "localhost",
+ "port"		: "27017",
+ "database" : "MyData",
+ "username" : "mongouser",
+ "password" : "secret",
+ "collection" : "userInfo"
+}
