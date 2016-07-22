@@ -46,6 +46,9 @@ Modules:
     "should": "^9.0.2",		 -> testing framework
     "supertest": "^1.2.0"	 -> testing framework
 
+users & password:
+admin admin
+jay  jay	
 	
 urls :
  1. for login  							  ---- GET: http://localhost:4001/login	
