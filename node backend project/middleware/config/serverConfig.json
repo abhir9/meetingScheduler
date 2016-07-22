@@ -1,5 +1,8 @@
 {
 	"view_engine" :"ejs",
 	"hostname" : "localhost",
-	"port"	: "4001"
+	"port"	: "4001",
+	"hostname1" : "localhost",
+	"port1"	: "4004"
+	
 }

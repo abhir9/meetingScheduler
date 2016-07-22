@@ -8,7 +8,7 @@ var logger = require('morgan');
 var serverConfig= require('./config/serverConfig');
 var fs = require('fs');
 
-
+var counter=0;
 
 app.use(logger('common', {
     stream: fs.createWriteStream('./log/access.log', {
@@ -24,4 +24,5 @@ app.use(bodyParser.urlencoded({
 
 app.use('/calendarId', router);
 app.listen(app.get('port'));
+
 console.log("Application running on " + app.get('port'));

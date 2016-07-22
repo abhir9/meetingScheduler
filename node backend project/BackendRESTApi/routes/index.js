@@ -16,6 +16,7 @@ mongoose.connect('mongodb://'+dbConfig.hostname+':'+dbConfig.port+'/'+dbConfig.d
 router.route("/")
     .get(function(req, res) {
         var response = {};
+        var count = new counterOp();
         calenderOp.find({}, function(err, data) {
             if (err) {
                 response = {
@@ -23,27 +24,72 @@ router.route("/")
                     "message": "Error fetching data"
                 };
             } else {
-				if(JSON.stringify(data)==='[]')
-				{
-					response = {
-                    "error": true,
-                    "message": "Error fetching data"
-                };
-				}
-				else
-				{
-					  response = {
+			  if(JSON.stringify(data)!=='[]')
+			  {
+           response = {
                     "error": false,
                     "message": data
                 };
-				}
-              
+	counterOp.find({}, function(err, data) {	
+			var totaltr = data[data.length - 1].totalTransantion;
+
+                counterOp.update({
+                    totalTransantion: totaltr
+                }, {
+                    $set: {
+                       totalTransantion:totaltr+1
+                    }
+                }, function(err) {
+                    if (err) {
+						console.log(err);
+                        response = {
+                            "error": true,
+                            "message": "Error updating data"
+                        };
+                    } else {
+                        response = {
+                            "error": false,
+                            "message": "Counter updated "
+                        };
+                    }
+                });
+	});
+				
+			}
+			else{ 
+				counterOp.find({}, function(err, data) {	
+				if (JSON.stringify(data)!=='[]') {
+                response = {
+                    "error": true,
+                    "message": "Error fetching data"
+                };
+					} else {				
+			count.totalScheduled=0;
+			count.totalTransantion=1;
+			count.totalDeleted=0;
+			count.totalCancled=0;
+			count.save(function(err) {
+                    if (err) {
+                        response = {
+                            "error": true,
+                            "message": "Error deleting data"
+                        };
+                    } else {
+                        response = {
+                            "error": false,
+                            "message": "Counter updated "
+                        };
+                    }
+                });
+			}
+			  });
+			}
             }
             res.json(response);
         });
     });
 
-	
+
 	// fetching All the counter details from database
 router.route("/counters")
     .get(function(req, res) {
@@ -69,7 +115,7 @@ router.route("/counters")
                     "message": data
                 };
 				}
-              
+
             }
             res.json(response);
         });
@@ -102,7 +148,8 @@ router.route("/")
                     "message": "Error fetching data"
                 };
             } else {
-
+			  if(JSON.stringify(data)!=='[]')
+			  {
               var totalsc = data[data.length - 1].totalScheduled;
               var totaltr = data[data.length - 1].totalTransantion;
 
@@ -126,7 +173,26 @@ router.route("/")
                     }
                 });
 
-
+			}
+			else{  
+			count.totalScheduled=1;
+			count.totalTransantion=1;
+			count.totalDeleted=0;
+			count.totalCancled=0;
+			count.save(function(err) {
+                    if (err) {
+                        response = {
+                            "error": true,
+                            "message": "Error deleting data"
+                        };
+                    } else {
+                        response = {
+                            "error": false,
+                            "message": "Counter updated "
+                        };
+                    }
+                });
+			}
             }
         });
 
@@ -180,7 +246,7 @@ router.route("/:id").get(function(req, res) {
                     "message": data
                 };
 				}
-              
+
             }
         res.json(response);
     });
@@ -263,7 +329,6 @@ router.route("/:id").delete(function(req, res) {
 // clear the counter
 router.route("/clearCounter").put(function(req, res ) {
     var response = {};
-	console.log('api hitted');
             counterOp.find({}, function(err, data) {
                 if (err) {
                     response = {
@@ -293,7 +358,7 @@ router.route("/clearCounter").put(function(req, res ) {
                 }
             });
 });
-    
+
 
 
 // cancle the meeting
@@ -341,7 +406,7 @@ router.route("/:id").put(function(req, res) {
                     var totalsc = data[data.length - 1].totalScheduled;
                     var totalcan = data[data.length - 1].totalCancled;
                     var totaltrn = data[data.length - 1].totalTransantion;
-					
+
                     counterOp.update({
                         totalScheduled: totalsc
                     }, {

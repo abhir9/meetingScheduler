@@ -37,9 +37,28 @@ Modules:
     "morgan": "^1.7.0",		 -> for logging
     "should": "^9.0.2",		 -> testin framework
     "supertest": "^1.2.0"	 -> testin framework
+
+sample post payload:
+
+{
+    "CalendarId": 1231,
+    "StartTime": "12:30am1",
+    "Duration": 601,
+    "StartDate": "12-5-2011",
+    "subject": "node disscussion1",
+    "users":[{
+        "fisrtName":"abhi"
+        },
+        {
+        "fisrtName":"abhi1"
+        }
+        ]
+    
+}
+
 	
 urls :
- 1. for getting all meetings  ---- GET:   localhost:4004/calendarId/	
+ 1. for getting all meetings  ---- GET:   localhost:4004/calendarId
  2. for setting meeting 	  ---- POST:  localhost:4004/calendarId/(pass body )
  3. for delete meeting 		  ---- DELETE:localhost:4004/calendarId/(#meetingId)
  4. for cancle meeting 		  ---- PUT:   localhost:4004/calendarId/(#meetingId) 

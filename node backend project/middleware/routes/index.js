@@ -7,8 +7,9 @@ var userCredentials = require('../models/user');
 var dateTime = require('date-time');
 var request = require('request');
 var serverConfig = require('../config/serverConfig.json');
-
+var timerCount , timerLog;
 module.exports = function(passport) {
+	
     passport.serializeUser(function(user, done) {
         done(null, user);
     })
@@ -40,6 +41,41 @@ module.exports = function(passport) {
     }));
 
     router.get('/login', function(req, res, next) {
+		var user = new userCredentials();
+		var user1 = new userCredentials();
+		
+		user.username='admin';
+	    user.password='admin';
+		user.status='offline';
+        user.logintime ="";
+        user.logoutime ="";
+		user1.username='jay';
+	    user1.password='jay';
+		user1.status='offline';
+        user1.logintime ="";
+        user1.logoutime ="";
+
+        userCredentials.find({}, function(err, data) {
+            if (err) {
+				console.log(err);
+            } else {
+                if (JSON.stringify(data) === '[]') {
+								user.save(function(err){
+									if(err)
+									{
+										console.log(err);
+									}
+								});
+								user1.save(function(err){
+									if(err)
+									{
+										console.log(err);
+									}
+								});
+
+				}
+            }
+        });
         res.render('login');
     });
 
@@ -92,6 +128,8 @@ module.exports = function(passport) {
 
 
     router.get('/logout', function(req, res, next) {
+						clearInterval(timerCount);
+						clearInterval(timerLog);
         var id = req.user['_id'];
         var timeInMss = dateTime() + "";
         var update = {
@@ -118,8 +156,19 @@ module.exports = function(passport) {
         res.render('users');
     })
 
-    router.get('/loggedinUsers', function(req, res, next) {
-        var response = {};
+	    router.get('/loggedinUsers', function(req, res, next) {
+	clearInterval(timerCount);
+ timerLog=setInterval(function(){
+        request('http://' + serverConfig.hostname + ':' + serverConfig.port + '/loggedinUser', function(error, response, body) 
+		{
+		 });
+		},2000);
+
+    })
+	
+	
+    router.get('/loggedinUser', function(req, res, next) {
+	var response = {};
         userCredentials.find({
             status: 'online'
         }, function(err, data) {
@@ -139,14 +188,18 @@ module.exports = function(passport) {
                         "error": false,
                         "message": data
                     };
+					console.log(JSON.stringify(response));
                 }
 
             }
-            res.json(response);
+//            res.json(response);
         });
 
     })
     router.get('/usersDetails', function(req, res, next) {
+		
+						clearInterval(timerCount);
+						clearInterval(timerLog);
         var response = {};
         userCredentials.find({}, function(err, data) {
             if (err) {
@@ -173,6 +226,8 @@ module.exports = function(passport) {
 
     })
     router.get('/getMeetings', function(req, res, next) {
+						clearInterval(timerCount);
+						clearInterval(timerLog);
         request('http://' + serverConfig.hostname1 + ':' + serverConfig.port1 + '/calendarId/	', function(error, response, body) {
             if (error) {
                 response = {
@@ -198,7 +253,9 @@ module.exports = function(passport) {
 
     })
     router.post('/setMeeting', function(req, res, next) {
-        request({
+				clearInterval(timerCount);
+				clearInterval(timerLog);
+	request({
                 url: 'http://' + serverConfig.hostname1 + ':' + serverConfig.port1 + '/calendarId/',
                 method: 'POST',
                 json: { //sample json data
@@ -240,7 +297,9 @@ module.exports = function(passport) {
 
     })
     router.get('/cancleMeeting/:id', function(req, res, next) {
-        request({
+				clearInterval(timerCount);
+				clearInterval(timerLog);
+	request({
             url: 'http://' + serverConfig.hostname1 + ':' + serverConfig.port1 + '/calendarId/' + req.params.id,
             method: 'PUT'
         }, function(error, response, body) {
@@ -268,6 +327,8 @@ module.exports = function(passport) {
 
     })
     router.get('/deleteMeeting/:id', function(req, res, next) {
+						clearInterval(timerCount);
+						clearInterval(timerLog);
         request({
             url: 'http://' + serverConfig.hostname1 + ':' + serverConfig.port1 + '/calendarId/' + req.params.id,
             method: 'DELETE'
@@ -297,6 +358,17 @@ module.exports = function(passport) {
     })
 
     router.get('/getCounters', function(req, res, next) {
+		clearInterval(timerLog);
+ timerCount=setInterval(function(){
+        request('http://' + serverConfig.hostname + ':' + serverConfig.port + '/getCounter', function(error, response, body) 
+		{
+		 });
+		},2000);
+
+    })
+
+	
+    router.get('/getCounter', function(req, res, next) {
         request('http://' + serverConfig.hostname1 + ':' + serverConfig.port1 + '/calendarId/counters', function(error, response, body) {
             if (error) {
                 response = {
@@ -317,13 +389,14 @@ module.exports = function(passport) {
                 }
 
             }
-            res.json(response);
-        });
-
+				console.log(JSON.stringify(response));
+				res.write(JSON.stringify(response));
+				res.end();
+ });
     })
-
-
     router.get('/resetCounters', function(req, res, next) {
+		clearInterval(timerCount);
+		clearInterval(timerLog);
         request({
             url: 'http://' + serverConfig.hostname1 + ':' + serverConfig.port1 + '/calendarId/clearCounter',
             method: 'PUT'

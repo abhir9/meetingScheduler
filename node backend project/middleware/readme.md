@@ -43,8 +43,9 @@ Modules:
     "mocha": "^2.5.3",		 -> testing framework
     "mongoose": "^4.5.4",	 -> provides ORM with mongodb
     "morgan": "^1.7.0",		 -> for logging
-    "should": "^9.0.2",		 -> testin framework
-    "supertest": "^1.2.0"	 -> testin framework
+    "should": "^9.0.2",		 -> testing framework
+    "supertest": "^1.2.0"	 -> testing framework
+
 	
 urls :
  1. for login  							  ---- GET: http://localhost:4001/login	
